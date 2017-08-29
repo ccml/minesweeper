@@ -1,21 +1,42 @@
-const printBoard = board => {
-  console.log('Current Board:');
-  console.log(board[0].join('|'));
-  console.log(board[1].join('|'));
-  console.log(board[2].join('|'));
-};
+const generatePlayerBoard = function(numberOfRows, numberOfColumns) {
+  let board = [];
+  for(let rowIndex=0; rowIndex < numberOfRows; rowIndex++) {
+	board.push([]);
+    for(let columnIndex=0; columnIndex < numberOfColumns; columnIndex++) {
+      board[rowIndex].push(' ');
+    }
+  }
+  return board;
+}
 
-let board = [];
+const generateBombBoard = function(numberOfRows, numberOfColumns, numberOfBombs) {
+  let board = [];
+  for(let rowIndex=0; rowIndex < numberOfRows; rowIndex++) {
+	board.push([]);
+    for(let columnIndex=0; columnIndex < numberOfColumns; columnIndex++) {
+      board[rowIndex].push(null);
+    }
+  }
+  let numberOfBombsPlaced = 0;
+  while(numberOfBombsPlaced < numberOfBombs) {
+	
+	let randomRowIndex = Math.floor(Math.random() * numberOfRows);
+	let randomColumnIndex = Math.floor(Math.random() * numberOfColumns);
+	
+	if(board[randomRowIndex][randomColumnIndex] === null) {
+	  board[randomRowIndex][randomColumnIndex] = 'B';
+	  numberOfBombsPlaced++;
+	}
+  }
+  return board;
+}
 
-board.push([],[],[]);
+const printBoard = board => console.log(board.map(row => row.map(cell => cell === null ? ' ' : cell).join(' | ')).join('\n'));
 
-board[0].push(' ', ' ', ' ');
-board[1].push(' ', ' ', ' ');
-board[2].push(' ', ' ', ' ');
+let playerBoard = generatePlayerBoard(3, 4);
+let bombBoard = generateBombBoard(3, 4, 5);
 
-printBoard(board);
-
-board[0][1] = '1';
-board[2][2] = 'B';
-
-printBoard(board);
+console.log('Player Board:');
+printBoard(playerBoard);
+console.log('Bomb Board:');
+printBoard(bombBoard);
